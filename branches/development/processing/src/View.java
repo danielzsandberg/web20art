@@ -15,7 +15,7 @@ public class View extends PApplet
 	public void setup()
 	{
 		size(WIDTH,HEIGHT);
-		//frameRate(20);
+		frameRate(1);
 		background(0);
 		fill(255);
 		ellipse(WIDTH/2,HEIGHT/2, 25,25);

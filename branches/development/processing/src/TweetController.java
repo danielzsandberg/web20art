@@ -1,43 +1,75 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter.Status;
 
 
 public class TweetController 
 {
-	private Object[] previousTweetRepository;
+	private LinkedList<String> previousTweetRepository; /**Contains all of the tweets printed on the screen*/
+	private ArrayList<String> tweetsToPrint; /**Contains all of the tweets that need to printed by the current loop*/
+	private boolean firstLoop; /**True if in the first loop*/
 	
-	private Object[] getTweetStrings()
+	public TweetController()
 	{
-		ArrayList<String> newTweets = new ArrayList<String>();
-		//TODO Get the xml file twitter
-		//TODO Parse the xml file and store
-		//TODO Determine where on the xml file to start reading
-		//TODO Below should be a for loop to add all of the new tweets to the list for export out of the method
-		newTweets.add("@Eric_theviking I think i might have a #twittercrush on you! *grins*");
-		newTweets.add("I have more than 1 #twittercrush they are @souljaboytellem @thalegacy @BenJNewBoyz & @xXAudioMonkXx they all sexayyyy lol");
-		newTweets.add("one of MY #twittercrush is @BlueyRobinson");
-		newTweets.add("#twittercrush hmmmmmm @ hmmmm @");
-		newTweets.add(" #twittercrush is (small voice) @Wale");
-		newTweets.add("@toritaylor haha aw tori <3 you're my #twittercrush too :)");
-		newTweets.add("thought i just saw #snowcrash on trending topics (combined #snowleopard and #twittercrush). too good to be true...");
+		previousTweetRepository = new LinkedList<String>();
+		tweetsToPrint = new ArrayList<String>();
+		firstLoop = true;
+	}
+	
+	private void getTweetStrings()
+	{
 		
-		Object[] currentTweetRepository = newTweets.toArray();
-		
-		previousTweetRepository = currentTweetRepository;
-		
-		return currentTweetRepository;
 	}
 	
 	public Tweet[] getTweets()
 	{
-		Object[] newTweetStrings = getTweetStrings();
+		//Search twitter
+		List<Status> newTweets = new Twitter().search("Maia Campbell");
+		ArrayList<String> newTweetsString = new ArrayList<String>();
+		
+		//Convert the list of statuses to a list of strings (necessary for status comparison)
+		for(int i = 0; i < newTweets.size(); i++)
+		{
+			newTweetsString.add(newTweets.get(i).getText());
+		}
+		
+		//Determine where on the list to start reading
+		int endIndex = 0;
+		if(previousTweetRepository.size() != 0)
+		{
+			endIndex = newTweetsString.indexOf(previousTweetRepository.get(0));
+		}
+		
+		//Append the first tweet to the beginning
+		if(firstLoop)
+		{
+			previousTweetRepository.add(newTweetsString.get(0));
+			System.out.println(newTweetsString.get(0));
+			firstLoop = false;
+		}
+		
+		//Add to the tweet repository and to the tweetsToPrint list
+		for(int i = 0, j = endIndex - 1; i < endIndex; i++, j--)
+		{
+			previousTweetRepository.add(0, newTweetsString.get(j));
+			System.out.println(newTweetsString.get(j));
+			tweetsToPrint.add(newTweetsString.get(i));
+		}
+		
+		//Conversion of tweetsToPrint into Tweet array
+		Object[] newTweetStrings = tweetsToPrint.toArray();
 		Tweet[] toReturn = new Tweet[newTweetStrings.length];
-		
-		
 		for(int i = 0; i < newTweetStrings.length; i++)
 		{
 			toReturn[i] = new Tweet((String)newTweetStrings[i], View.WIDTH, View.HEIGHT);
 		}
 		
+		//Reset tweetsToPrint list
+		tweetsToPrint.clear();
+			
 		return toReturn;
 	}
 

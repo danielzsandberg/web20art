@@ -27,7 +27,7 @@ public class TweetController
 	public Tweet[] getTweets()
 	{
 		//Search twitter
-		List<Status> newTweets = new Twitter().search("Maia Campbell");
+		List<Status> newTweets = new Twitter().search("twitter");
 		ArrayList<String> newTweetsString = new ArrayList<String>();
 		
 		//Convert the list of statuses to a list of strings (necessary for status comparison)

@@ -1,3 +1,5 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -6,28 +8,32 @@ import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 
 
-public class TweetController 
+public class TweetController
 {
 	private LinkedList<String> previousTweetRepository; /**Contains all of the tweets printed on the screen*/
 	private ArrayList<String> tweetsToPrint; /**Contains all of the tweets that need to printed by the current loop*/
 	private boolean firstLoop; /**True if in the first loop*/
+	private View view;
 	
+	private String searchQuery;
+	
+	
+	
+
 	public TweetController()
 	{
 		previousTweetRepository = new LinkedList<String>();
 		tweetsToPrint = new ArrayList<String>();
 		firstLoop = true;
+		view = new View(this);
+		view.setVisible(true);
 	}
 	
-	private void getTweetStrings()
-	{
-		
-	}
 	
 	public Tweet[] getTweets()
 	{
 		//Search twitter
-		List<Status> newTweets = new Twitter().search("twitter");
+		List<Status> newTweets = new Twitter().search(searchQuery);
 		ArrayList<String> newTweetsString = new ArrayList<String>();
 		
 		//Convert the list of statuses to a list of strings (necessary for status comparison)
@@ -55,7 +61,6 @@ public class TweetController
 		for(int i = 0, j = endIndex - 1; i < endIndex; i++, j--)
 		{
 			previousTweetRepository.add(0, newTweetsString.get(j));
-			System.out.println(newTweetsString.get(j));
 			tweetsToPrint.add(newTweetsString.get(i));
 		}
 		
@@ -65,12 +70,22 @@ public class TweetController
 		for(int i = 0; i < newTweetStrings.length; i++)
 		{
 			toReturn[i] = new Tweet((String)newTweetStrings[i], View.WIDTH, View.HEIGHT);
+			System.out.println((String)newTweetStrings[i]);
 		}
 		
 		//Reset tweetsToPrint list
 		tweetsToPrint.clear();
-			
+		
 		return toReturn;
 	}
+	
+	public static void main(String[] args)
+	{
+		new TweetController();
+	}
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
+
 
 }

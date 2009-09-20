@@ -30,5 +30,10 @@ public class Tweet
 	{
 		return r.nextInt(frameHeight);
 	}
+	
+	public String getRandomFont(int numberOfFontFiles)
+	{
+		return new Integer(r.nextInt(numberOfFontFiles) + 1).toString() + ".vlw";
+	}
 
 }

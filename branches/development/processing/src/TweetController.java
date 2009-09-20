@@ -70,7 +70,6 @@ public class TweetController
 		for(int i = 0; i < newTweetStrings.length; i++)
 		{
 			toReturn[i] = new Tweet((String)newTweetStrings[i], View.WIDTH, View.HEIGHT);
-			System.out.println((String)newTweetStrings[i]);
 		}
 		
 		//Reset tweetsToPrint list

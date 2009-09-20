@@ -47,17 +47,17 @@ public class View extends JFrame
 			fill(255);
 			ellipse(View.WIDTH/2,View.HEIGHT/2, 25,25);
 			
-			this.textFont(this.loadFont("DialogInput-14.vlw"));
+			
 			
 			
 		}
 		
 		public void draw()
 		{
-			System.out.println("ANIMATING AGAIN!");
 			Tweet[] newTweets = tweetCTRL.getTweets();
 			for(int i = 0; i < newTweets.length; i++)
 			{
+				this.textFont(this.loadFont(newTweets[i].getRandomFont(18)));
 				fill(random(255),random(255),random(255));
 				text(newTweets[i].getText(), newTweets[i].getRandomX(), newTweets[i].getRandomY());
 				System.out.println(newTweets[i].getText());

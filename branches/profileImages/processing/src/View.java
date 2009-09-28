@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 
 public class View extends JFrame
@@ -24,7 +25,7 @@ public class View extends JFrame
         super("web20art");
        
         this.tweetCTRL = tweetCTRL;
-    	tweetCTRL.setSearchQuery(JOptionPane.showInputDialog("O que a Terra quer dizer a respeito: "));
+    	tweetCTRL.setSearchQuery(JOptionPane.showInputDialog("O que a Terra quer dizer sobre: "));
         setSize(WIDTH,HEIGHT);
         setLayout(new BorderLayout());
         embed = new ProcessingApplet();
@@ -42,7 +43,7 @@ public class View extends JFrame
 		public void setup()
 		{
 			size(View.WIDTH,View.HEIGHT);
-			frameRate(1);
+			frameRate((float) 1);
 			background(0);
 			fill(255);
 			ellipse(View.WIDTH/2,View.HEIGHT/2, 25,25);
@@ -57,13 +58,16 @@ public class View extends JFrame
 			Tweet[] newTweets = tweetCTRL.getTweets();
 			for(int i = 0; i < newTweets.length; i++)
 			{
+				Tweet currentTweet = newTweets[i];
 				this.textFont(this.loadFont(newTweets[i].getRandomFont(18)));
 				fill(random(255),random(255),random(255));
-				text(newTweets[i].getText(), newTweets[i].getRandomX(), newTweets[i].getRandomY());
-				System.out.println(newTweets[i].getText());
+				text(currentTweet.getText(), currentTweet.getX(), currentTweet.getY());
+				PImage currentProfilePic = loadImage(currentTweet.getImageURL());
+				image(currentProfilePic, currentTweet.getImageX(), currentTweet.getImageY());
 			}
 			fill(255);
 			ellipse(View.WIDTH/2,View.HEIGHT/2, 25,25);
+			System.out.println("One draw iteration finished!");	
 		}
 		
 	}

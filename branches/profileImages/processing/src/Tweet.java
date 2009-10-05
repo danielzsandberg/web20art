@@ -45,12 +45,12 @@ public class Tweet
 	
 	public int getImageX()
 	{
-		return x - 20;
+		return x - 55;
 	}
 	
 	public int getImageY()
 	{
-		return y;
+		return y-10;
 	}
 	
 	public String getImageURL()

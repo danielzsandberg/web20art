@@ -4,19 +4,22 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 
 
-public class TweetController
+public class TweetController extends TimerTask
 {
 	
 	private LinkedList<String> previousTweetRepository; /**Contains all of the tweets printed on the screen*/
-	private ArrayList<String> tweetsToPrint; /**Contains all of the tweets that need to printed by the current loop*/
 	private boolean firstLoop; /**True if in the first loop*/
 	private View view;
-	
+	private Queue<Tweet> tweetQueue;
 	private String searchQuery;
 	
 	private static final String DELIMITER = "                                              ";
@@ -26,15 +29,16 @@ public class TweetController
 	public TweetController()
 	{
 		previousTweetRepository = new LinkedList<String>();
-		tweetsToPrint = new ArrayList<String>();
+		tweetQueue = new ConcurrentLinkedQueue<Tweet>();
 		firstLoop = true;
 		view = new View(this);
 		view.setVisible(true);
 	}
 	
 	
-	public Tweet[] getTweets()
+	public void getTweets()
 	{
+		
 		//Search twitter
 		List<Status> newTweets = new Twitter().search(searchQuery);
 	
@@ -67,6 +71,8 @@ public class TweetController
 			firstLoop = false;
 		}
 		
+		ArrayList<String> tweetsToPrint = new ArrayList<String>();
+
 		//Add to the tweet repository and to the tweetsToPrint list
 		for(int i = 0, j = endIndex - 1; i < endIndex; i++, j--)
 		{
@@ -82,20 +88,30 @@ public class TweetController
 			String[] parsedInfo = ((String)newTweetStrings[i]).split(TweetController.DELIMITER);
 			String tweet = parsedInfo[0];
 			String imageURL = parsedInfo[1];
-			toReturn[i] = new Tweet(tweet,imageURL, View.WIDTH, View.HEIGHT);
+			tweetQueue.add(new Tweet(tweet,imageURL, View.WIDTH, View.HEIGHT));
 		}
 		
-		//Reset tweetsToPrint list
-		tweetsToPrint.clear();
 		
-		return toReturn;
 	}
 	
 	public static void main(String[] args)
 	{
-		new TweetController();
+		TimerTask ctrl = new TweetController();
+		Timer timer = new Timer();
+		timer.schedule(ctrl, 0, 8000);
 	}
 	public void setSearchQuery(String searchQuery) {
 		this.searchQuery = searchQuery;
+	}
+
+
+	public Tweet nextTweet() {
+		return tweetQueue.poll();
+	}
+	
+	public void run() 
+	{
+		getTweets();
+		System.out.println("Tamanho do Twitter repository: "+tweetQueue.size());
 	}
 }

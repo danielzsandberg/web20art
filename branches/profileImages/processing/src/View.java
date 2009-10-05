@@ -2,7 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -18,19 +22,27 @@ public class View extends JFrame
 	
 	private ProcessingApplet embed;
 	private TweetController tweetCTRL;
+	private int drawingInterval;
 	
 	public View(TweetController tweetCTRL) 
 	{
 		
-        super("web20art");
-       
+        super("");
+        this.drawingInterval = 0;
         this.tweetCTRL = tweetCTRL;
-    	tweetCTRL.setSearchQuery(JOptionPane.showInputDialog("O que a Terra quer dizer sobre: "));
+        String searchQuery = JOptionPane.showInputDialog(this,"O que a Terra quer dizer sobre: ", "", JOptionPane.PLAIN_MESSAGE);
+        if(searchQuery == null)
+        	System.exit(0);
+        //this.setIconImage(new ImageIcon("icon.png").getImage());
+
+    	tweetCTRL.setSearchQuery(searchQuery);
         setSize(WIDTH,HEIGHT);
+        setResizable(false);
         setLayout(new BorderLayout());
         embed = new ProcessingApplet();
         add(embed, BorderLayout.CENTER);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         // important to call this whenever embedding a PApplet.
         // It ensures that the animation thread is started and
         // that other internal variables are properly set.
@@ -43,10 +55,10 @@ public class View extends JFrame
 		public void setup()
 		{
 			size(View.WIDTH,View.HEIGHT);
-			frameRate((float) 1);
+			frameRate((float) 5);
 			background(0);
 			fill(255);
-			ellipse(View.WIDTH/2,View.HEIGHT/2, 25,25);
+			ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);
 			
 			
 			
@@ -55,19 +67,22 @@ public class View extends JFrame
 		
 		public void draw()
 		{
-			Tweet[] newTweets = tweetCTRL.getTweets();
-			for(int i = 0; i < newTweets.length; i++)
-			{
-				Tweet currentTweet = newTweets[i];
-				this.textFont(this.loadFont(newTweets[i].getRandomFont(18)));
-				fill(random(255),random(255),random(255));
-				text(currentTweet.getText(), currentTweet.getX(), currentTweet.getY());
-				PImage currentProfilePic = loadImage(currentTweet.getImageURL());
-				image(currentProfilePic, currentTweet.getImageX(), currentTweet.getImageY());
+			try{
+				Tweet currentTweet = tweetCTRL.nextTweet();
+				if(currentTweet != null)
+				{
+					this.textFont(this.loadFont(currentTweet.getRandomFont(18)));
+					fill(random(255),random(255),random(255));
+					text(currentTweet.getText(), currentTweet.getX(), currentTweet.getY());
+					PImage currentProfilePic = loadImage(currentTweet.getImageURL());
+					image(currentProfilePic, currentTweet.getImageX(), currentTweet.getImageY());
+			
+					ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);
+				}
+				System.out.println("Drawing itera‹o " + drawingInterval++ + " acabado!");
+			}catch(Exception e){
+				System.out.println("Error!");
 			}
-			fill(255);
-			ellipse(View.WIDTH/2,View.HEIGHT/2, 25,25);
-			System.out.println("One draw iteration finished!");	
 		}
 		
 	}

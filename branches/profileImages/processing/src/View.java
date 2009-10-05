@@ -30,7 +30,7 @@ public class View extends JFrame
         super("");
         this.drawingInterval = 0;
         this.tweetCTRL = tweetCTRL;
-        String searchQuery = JOptionPane.showInputDialog(this,"O que a Terra quer dizer sobre: ", "", JOptionPane.PLAIN_MESSAGE);
+        String searchQuery = JOptionPane.showInputDialog(this,"O que a Terra quer dizer sobre: (What does the world want to say about: )", "", JOptionPane.PLAIN_MESSAGE);
         if(searchQuery == null)
         	System.exit(0);
         //this.setIconImage(new ImageIcon("icon.png").getImage());
@@ -55,7 +55,7 @@ public class View extends JFrame
 		public void setup()
 		{
 			size(View.WIDTH,View.HEIGHT);
-			frameRate((float) 5);
+			frameRate((float) 30);
 			background(0);
 			fill(255);
 			ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);

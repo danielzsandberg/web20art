@@ -36,7 +36,7 @@ public class View extends JFrame
         this.currentY = 0;
         this.drawingInterval = 0;
         this.tweetCTRL = tweetCTRL;
-        String searchQuery = JOptionPane.showInputDialog(this,"O que a Terra quer dizer sobre: (What does the world want to say about: )", "", JOptionPane.PLAIN_MESSAGE);
+        String searchQuery = JOptionPane.showInputDialog(this,"Quem esta falando sobre: (Who's talking about:)", "", JOptionPane.PLAIN_MESSAGE);
         if(searchQuery == null)
         	System.exit(0);
         //this.setIconImage(new ImageIcon("icon.png").getImage());

@@ -14,7 +14,11 @@ import javax.swing.JTextArea;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-
+/**
+ * This class is responsible for configuring the JFrame and adding the processing applet (http://processing.org/) inside for animation.
+ * 
+ * @author Daniel Sandberg
+ */
 public class View extends JFrame
 {
 	public static final int WIDTH = 700;
@@ -23,6 +27,7 @@ public class View extends JFrame
 	private ProcessingApplet embed;
 	private TweetController tweetCTRL;
 	private int drawingInterval;
+	
 	
 	public View(TweetController tweetCTRL) 
 	{
@@ -49,7 +54,13 @@ public class View extends JFrame
         embed.init();
     }
 	
-	
+	/**
+	 * This internal class contains calls to the Processing API (http://processing.org/) to animate the tweets.
+	 * It contains one call to the TweetController to retrieve the next Tweet in the queue and animates that Tweet
+	 * with its accompanying profile picture
+	 * @author Daniel Sandberg
+	 *
+	 */
 	class ProcessingApplet extends PApplet
 	{
 		public void setup()
@@ -58,11 +69,7 @@ public class View extends JFrame
 			frameRate((float) 30);
 			background(0);
 			fill(255);
-			ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);
-			
-			
-			
-			
+			ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);	
 		}
 		
 		public void draw()

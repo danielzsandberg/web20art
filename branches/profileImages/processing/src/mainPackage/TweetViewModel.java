@@ -9,10 +9,6 @@ import java.util.Random;
 
 public class TweetViewModel 
 {
-	private String text; /**The text of the tweet.*/
-	private String imageURL; /**The URL of the profile image of the user that tweets this tweet*/
-	private int frameWidth; /**The width of the JFrame that contains application.*/
-	private int frameHeight; /**The height of the JFrame that contains application.*/
 	private int x; /**The x coordinate of the location of the tweet on the screen.*/
 	private int y; /**The y coordinate of the location of the tweet on the screen.*/
 	private Random r; /**The random number generator for the coordinates of the tweet.*/
@@ -23,8 +19,6 @@ public class TweetViewModel
 	public TweetViewModel(Tweet tweet, int frameWidth, int frameHeight)
 	{
 		this.tweet = tweet;
-		this.frameWidth = frameWidth;
-		this.frameHeight = frameHeight;
 		r = new Random();
 		this.x = r.nextInt(frameWidth);
 		this.y = r.nextInt(frameHeight);

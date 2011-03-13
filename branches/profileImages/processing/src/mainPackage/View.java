@@ -1,3 +1,5 @@
+package mainPackage;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -75,7 +77,7 @@ public class View extends JFrame
 		public void draw()
 		{
 			try{
-				Tweet currentTweet = tweetCTRL.nextTweet();
+				TweetViewModel currentTweet = tweetCTRL.nextTweet();
 				if(currentTweet != null)
 				{
 					this.textFont(this.loadFont(currentTweet.getRandomFont(18)));
@@ -86,7 +88,7 @@ public class View extends JFrame
 			
 					ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);
 				}
-				System.out.println("Drawing iteração " + drawingInterval++ + " acabado!");
+				System.out.println("Drawing iteraÔøΩ‚Äπo " + drawingInterval++ + " acabado!");
 			}catch(Exception e){
 				System.out.println("Error!");
 			}

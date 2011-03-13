@@ -8,7 +8,7 @@ import mainPackage.Tweet;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 
-public class WinterwellTweetRepository implements ITweetRepository 
+class WinterwellTweetRepository implements ITweetRepository 
 {
 	public List<Tweet> getBySearchTerm(String searchTerm) 
 	{

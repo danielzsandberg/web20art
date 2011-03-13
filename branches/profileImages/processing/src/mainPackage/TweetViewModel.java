@@ -1,3 +1,4 @@
+package mainPackage;
 import java.util.Random;
 
 /**
@@ -6,7 +7,7 @@ import java.util.Random;
  * @author Daniel Sandberg
  * */
 
-public class Tweet 
+public class TweetViewModel 
 {
 	private String text; /**The text of the tweet.*/
 	private String imageURL; /**The URL of the profile image of the user that tweets this tweet*/
@@ -15,22 +16,24 @@ public class Tweet
 	private int x; /**The x coordinate of the location of the tweet on the screen.*/
 	private int y; /**The y coordinate of the location of the tweet on the screen.*/
 	private Random r; /**The random number generator for the coordinates of the tweet.*/
+	private Tweet tweet;
 	
-	public Tweet(String text, String imageURL, int frameWidth, int frameHeight)
+	
+	
+	public TweetViewModel(Tweet tweet, int frameWidth, int frameHeight)
 	{
-		this.text = text;
-		this.imageURL = imageURL;
+		this.tweet = tweet;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 		r = new Random();
 		this.x = r.nextInt(frameWidth);
 		this.y = r.nextInt(frameHeight);
-		
+	
 	}
 	
 	public String getText()
 	{
-		return text;
+		return tweet.getText();
 	}
 	
 	public int getX()
@@ -69,7 +72,7 @@ public class Tweet
 	
 	public String getImageURL()
 	{
-		return imageURL;
+		return tweet.getImageURL();
 	}
 
 }

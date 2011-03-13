@@ -1,3 +1,5 @@
+package mainPackage;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.MalformedURLException;
@@ -9,8 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.Twitter.Status;
+import Repository.ITweetRepository;
+import Repository.WinterwellTweetRepository;
+
 
 /**This controller class is responsible for retrieving streaming and caching tweets in a seperate thread.
  * It also defines and implements a thread to access that cache.
@@ -20,83 +23,62 @@ import winterwell.jtwitter.Twitter.Status;
 
 public class TweetController extends TimerTask
 {
-	private LinkedList<String> previousTweetRepository; /**Contains all of the tweets printed on the screen*/
+	private LinkedList<Tweet> previousTweetRepository; /**Contains all of the tweets printed on the screen*/
 	private boolean firstLoop; /**True if in the first loop*/
 	private View view; /**Object representing the user interface.*/
-	private Queue<Tweet> tweetQueue; /**The Tweet cache in the form of a queue*/
+	private Queue<TweetViewModel> tweetQueue; /**The Tweet cache in the form of a queue*/
 	private String searchQuery; /**The search query from the user*/
-	
-	private static final String DELIMITER = "                                              "; /**Used to delimit the text of the tweet and the profile image URL*/
-	
-	
+	private ITweetRepository tweetRepository;
 
-	public TweetController()
+	public TweetController(ITweetRepository tweetRepository)
 	{
-		previousTweetRepository = new LinkedList<String>();
-		tweetQueue = new ConcurrentLinkedQueue<Tweet>();
+		previousTweetRepository = new LinkedList<Tweet>();
+		tweetQueue = new ConcurrentLinkedQueue<TweetViewModel>();
 		firstLoop = true;
 		//Instantiates and makes the view visible
 		view = new View(this);
 		view.setVisible(true);
+		this.tweetRepository = tweetRepository;
 	}
 	
 	/**
-	 * 1. Gets the Tweets for the search term using the Winterwell Twitter library.
-	 * 2. Extract the new tweets retreived from the Winterwell API
-	 * 3. Add the new tweets to the Queue
+	 * 1. Gets the new tweets from the repository 
+	 * 2. Add the new tweets to the Queue
 	 */
 	public void getTweets()
 	{
 		
 		//Search twitter using the Winterwell Twitter library
-		List<Status> newTweets = new Twitter().search(searchQuery);
+		List<Tweet> newTweets = tweetRepository.getBySearchTerm(searchQuery);
 	
-		ArrayList<String> newTweetsString = new ArrayList<String>();
-		
-		//Convert the list of statuses to a list of strings (necessary for status comparison)
-		for(int i = 0; i < newTweets.size(); i++)
-		{
-			try 
-			{
-				newTweetsString.add(newTweets.get(i).getText() + TweetController.DELIMITER + newTweets.get(i).getUser().getProfileImageUrl().toURL().toString());
-			} 
-			catch (MalformedURLException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-		
 		//Determine where on the list to start reading
 		int endIndex = 0;
 		if(previousTweetRepository.size() != 0)
 		{
-			endIndex = newTweetsString.indexOf(previousTweetRepository.get(0));
+			endIndex = newTweets.indexOf(previousTweetRepository.get(0));
 		}
 		
 		//Append the first tweet to the beginning
 		if(firstLoop)
 		{
-			previousTweetRepository.add(newTweetsString.get(0));
+			previousTweetRepository.add(newTweets.get(0));
 			firstLoop = false;
 		}
 		
-		ArrayList<String> tweetsToPrint = new ArrayList<String>();
+		ArrayList<Tweet> tweetsToPrint = new ArrayList<Tweet>();
 
 		//Add to the tweet repository and to the tweetsToPrint list
 		for(int i = 0, j = endIndex - 1; i < endIndex; i++, j--)
 		{
-			previousTweetRepository.add(0, newTweetsString.get(j));
-			tweetsToPrint.add(newTweetsString.get(i));
+			previousTweetRepository.add(0, newTweets.get(j));
+			tweetsToPrint.add(newTweets.get(i));
 		}
 		
 		//Conversion of tweetsToPrint into Tweet array
-		Object[] newTweetStrings = tweetsToPrint.toArray();
-		for(int i = 0; i < newTweetStrings.length; i++)
+		for(int i = 0; i < newTweets.size(); i++)
 		{
-			String[] parsedInfo = ((String)newTweetStrings[i]).split(TweetController.DELIMITER);
-			String tweet = parsedInfo[0];
-			String imageURL = parsedInfo[1];
-			tweetQueue.add(new Tweet(tweet,imageURL, View.WIDTH, View.HEIGHT));
+			Tweet currentTweet = newTweets.get(i);
+			tweetQueue.add(new TweetViewModel(currentTweet, View.WIDTH, View.HEIGHT));
 		}
 		
 		
@@ -104,7 +86,7 @@ public class TweetController extends TimerTask
 	
 	public static void main(String[] args)
 	{
-		TimerTask ctrl = new TweetController();
+		TimerTask ctrl = new TweetController(new WinterwellTweetRepository());
 		Timer timer = new Timer();
 		timer.schedule(ctrl, 0, 8000);
 	}
@@ -120,7 +102,7 @@ public class TweetController extends TimerTask
 	 * recent Tweet in the cache
 	 * @return Tweet
 	 */
-	public Tweet nextTweet() {
+	public TweetViewModel nextTweet() {
 		return tweetQueue.poll();
 	}
 	

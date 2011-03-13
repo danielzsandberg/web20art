@@ -1,8 +1,5 @@
 package mainPackage;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +9,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import Repository.ITweetRepository;
-import Repository.WinterwellTweetRepository;
+import Repository.ITweetRepositoryFactory;
+import Repository.WinterwellRepositoryFactory;
 
 
 /**This controller class is responsible for retrieving streaming and caching tweets in a seperate thread.
@@ -30,7 +28,7 @@ public class TweetController extends TimerTask
 	private String searchQuery; /**The search query from the user*/
 	private ITweetRepository tweetRepository;
 
-	public TweetController(ITweetRepository tweetRepository)
+	public TweetController(ITweetRepositoryFactory tweetRepositoryFactory)
 	{
 		previousTweetRepository = new LinkedList<Tweet>();
 		tweetQueue = new ConcurrentLinkedQueue<TweetViewModel>();
@@ -38,7 +36,7 @@ public class TweetController extends TimerTask
 		//Instantiates and makes the view visible
 		view = new View(this);
 		view.setVisible(true);
-		this.tweetRepository = tweetRepository;
+		this.tweetRepository = tweetRepositoryFactory.getTweetRepository();
 	}
 	
 	/**
@@ -86,7 +84,7 @@ public class TweetController extends TimerTask
 	
 	public static void main(String[] args)
 	{
-		TimerTask ctrl = new TweetController(new WinterwellTweetRepository());
+		TimerTask ctrl = new TweetController(new WinterwellRepositoryFactory());
 		Timer timer = new Timer();
 		timer.schedule(ctrl, 0, 8000);
 	}

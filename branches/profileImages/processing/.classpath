@@ -4,5 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="core.jar"/>
 	<classpathentry kind="lib" path="jtwitter.jar"/>
+	<classpathentry kind="lib" path="signpost-commonshttp4.jar"/>
+	<classpathentry kind="lib" path="signpost-core.jar"/>
+	<classpathentry kind="lib" path="commons-codec-1.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

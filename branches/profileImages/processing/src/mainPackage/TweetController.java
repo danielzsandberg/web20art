@@ -8,6 +8,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import winterwell.jtwitter.OAuthSignpostClient;
+import winterwell.jtwitter.Status;
+import winterwell.jtwitter.Twitter;
 import Repository.ITweetRepository;
 import Repository.ITweetRepositoryFactory;
 import Repository.WinterwellRepositoryFactory;

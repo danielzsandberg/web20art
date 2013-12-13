@@ -80,7 +80,6 @@ public class View extends JFrame
 			
 					ellipse(View.WIDTH/2,View.HEIGHT/2, 100,100);
 				}
-				System.out.println("Drawing itera�‹o " + drawingInterval++ + " acabado!");
 			}catch(Exception e){
 				System.out.println("Error!");
 			}

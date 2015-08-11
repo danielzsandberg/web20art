@@ -47,7 +47,10 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
-# Compilation output
+# IntelliJ compilation output
 production/
+
+# Gradle compilation output
+build/
 
 

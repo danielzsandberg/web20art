@@ -1,3 +1,5 @@
+![](screenshot.png)
+
 Este projeto de arte é uma visualização de dados sociais. A proposta desta obra é expressar o estado do consumo de informação dentro de uma web definida pelas leis da Web 2.0.
 
 Detalhes técnicos:

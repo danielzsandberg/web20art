@@ -52,5 +52,6 @@ production/
 
 # Gradle compilation output
 build/
+.gradle/
 
 

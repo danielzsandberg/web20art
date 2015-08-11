@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="dependencies">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dependencies/commons-codec-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/signpost-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/jtwitter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/signpost-commonshttp4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/core.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
